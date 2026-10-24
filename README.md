@@ -29,6 +29,8 @@ git config --local alias.repass '!go run ./cmd/repass'
 
 You can also run `go run ./cmd/repass` directly from the repository root. This resets the existing account in the local `data/commonplace.db`; it requires Go and does not reset a separate deployed server.
 
+If the app runs with a different working directory, supply its actual database path: `go run ./cmd/repass -db /path/to/data/commonplace.db`. Run this on the machine that stores the app's database, using a user that can write to the database and its parent directory.
+
 An existing `data/bookmarks.json` is imported automatically once, preserving sites and click counts. The JSON file is left intact. Fresh installations start with example sites. Deleting every site leaves an empty list across restarts.
 
 Back up SQLite using its backup API or stop the server before copying `data/commonplace.db` (including any `-wal`/`-shm` files still present). Keep the data directory private.

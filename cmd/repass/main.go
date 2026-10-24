@@ -4,9 +4,11 @@ import (
 	"crypto/rand"
 	"database/sql"
 	"encoding/hex"
+	"flag"
 	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"path/filepath"
 
 	"golang.org/x/crypto/bcrypt"
@@ -45,9 +47,18 @@ func resetPassword(db *sql.DB) (string, string, error) {
 }
 
 func main() {
-	path, err := filepath.Abs(filepath.Join("data", "commonplace.db"))
+	databasePath := flag.String("db", filepath.Join("data", "commonplace.db"), "path to the running app's existing SQLite database")
+	flag.Parse()
+	path, err := filepath.Abs(*databasePath)
 	if err != nil {
 		log.Fatal(err)
+	}
+	info, err := os.Stat(path)
+	if err != nil {
+		log.Fatalf("cannot access database %q: %v; run from the app's working directory or use -db /path/to/data/commonplace.db", path, err)
+	}
+	if !info.Mode().IsRegular() {
+		log.Fatalf("database %q is not a regular file", path)
 	}
 	dsn := (&url.URL{Scheme: "file", Path: path}).String() + "?mode=rw&_pragma=busy_timeout(5000)"
 	db, err := sql.Open("sqlite", dsn)
@@ -55,6 +66,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+	if err := db.Ping(); err != nil {
+		log.Fatalf("cannot open database %q: %v; check that your user can write to both the database and its parent directory", path, err)
+	}
 	username, password, err := resetPassword(db)
 	if err != nil {
 		log.Fatalf("reset admin password: %v", err)
