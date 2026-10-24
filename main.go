@@ -68,7 +68,7 @@ func main() {
 
 	address := os.Getenv("ADDR")
 	if address == "" {
-		address = ":8080"
+		address = ":5001"
 	}
 	server := &http.Server{
 		Addr:              address,

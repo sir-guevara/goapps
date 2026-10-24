@@ -11,7 +11,7 @@ go mod tidy
 ADMIN_USERNAME=admin ADMIN_PASSWORD='choose-a-strong-password' go run .
 ```
 
-Open `http://localhost:8080`, choose **Admin sign in**, and use those credentials. Set `ADDR` to change the listen address. Use HTTPS when deploying publicly so session cookies are sent securely.
+Open `http://localhost:5001`, choose **Admin sign in**, and use those credentials. Set `ADDR` to change the listen address. Use HTTPS when deploying publicly so session cookies are sent securely.
 
 The admin account is created only on the first run and stored in SQLite with a bcrypt password hash. If `ADMIN_PASSWORD` is unset on that first run, the server generates and prints an initial password; save it. Passwords must be at most 72 bytes. Later restarts use the saved account; changing environment variables does not overwrite it.
 
