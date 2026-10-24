@@ -17,6 +17,18 @@ The admin account is created only on the first run and stored in SQLite with a b
 
 Sites, click counts, the admin account, and sessions are stored in `data/commonplace.db`. Sessions expire after 12 hours, survive restarts, and are revoked on sign out. Only hashes of session tokens are stored in the database. Cookies are HttpOnly and SameSite=Lax. Cross-site mutation requests are rejected.
 
+### Reset a forgotten admin password
+
+Run `git repass` from this repository to generate and save a new admin password. The command prints the username and new password; save it in your password manager. Existing admin sessions are revoked, and bookmarks are preserved. The server can stay running.
+
+To enable the command in a fresh checkout, run:
+
+```sh
+git config --local alias.repass '!go run ./cmd/repass'
+```
+
+You can also run `go run ./cmd/repass` directly from the repository root. This resets the existing account in the local `data/commonplace.db`; it requires Go and does not reset a separate deployed server.
+
 An existing `data/bookmarks.json` is imported automatically once, preserving sites and click counts. The JSON file is left intact. Fresh installations start with example sites. Deleting every site leaves an empty list across restarts.
 
 Back up SQLite using its backup API or stop the server before copying `data/commonplace.db` (including any `-wal`/`-shm` files still present). Keep the data directory private.
