@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8fa">
+    <meta name="description" content="Your everyday apps and useful links, all in one place.">
+    <title>G&amp;O Apps — Your apps, one place</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="G&amp;O Apps home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>G&amp;O Apps</span>
+        </a>
+        <div class="topbar-right">
+          <span class="live-note"><span class="live-dot"></span> Your personal launchpad</span>
+          <button class="admin-trigger" id="admin-trigger" type="button">Admin sign in <span aria-hidden="true">↗</span></button>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro">
+          <div class="eyebrow">YOUR EVERYDAY STARTING POINT</div>
+          <h1>Your apps. <span>One place.</span></h1>
+          <p class="intro-description">Less searching. More doing. Jump into something good.</p>
+          <label class="search-box">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.8"></circle><path d="m13.2 13.2 4 4"></path></svg>
+            <input id="search" type="search" placeholder="Search apps and links…" autocomplete="off" aria-label="Search apps and links">
+            <kbd class="search-shortcut">⌘ K</kbd>
+          </label>
+        </section>
+
+        <section class="collection" aria-labelledby="collection-title">
+          <div class="collection-heading">
+            <h2 id="collection-title">Your launchpad <span class="count-badge" id="bookmark-count">—</span></h2>
+            <span class="collection-hint">A shortcut to your next thing <span aria-hidden="true">↗</span></span>
+          </div>
+          <div class="filters" id="filters" aria-label="Filter by category"></div>
+          <div class="bookmark-grid" id="bookmark-grid" aria-live="polite"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon" aria-hidden="true">⌕</span>
+            <strong>No apps found.</strong>
+            <span>Try another search or category.</span>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>A little less friction. A little more flow.</span>
+        <span><span id="total-clicks">0</span> launches <span class="footer-arrow" aria-hidden="true">↗</span></span>
+      </footer>
+    </div>
+
+    <div class="admin-panel" id="admin-panel" hidden>
+      <div class="admin-panel-head">
+        <div><span class="section-kicker">YOUR SPACE</span><h2>Manage apps</h2></div>
+        <button class="icon-button" id="close-admin" type="button" aria-label="Close admin panel">×</button>
+      </div>
+      <div class="admin-stats">
+        <div><strong id="admin-total">0</strong><span>bookmarks</span></div>
+        <div><strong id="admin-clicks">0</strong><span>total clicks</span></div>
+        <div><strong id="admin-categories">0</strong><span>categories</span></div>
+      </div>
+      <button class="primary-button add-bookmark" id="add-bookmark" type="button"><span>＋</span> Add an app</button>
+      <div class="manage-list" id="manage-list"></div>
+      <button class="text-button sign-out" id="sign-out" type="button">Sign out <span aria-hidden="true">↗</span></button>
+    </div>
+    <div class="panel-backdrop" id="panel-backdrop" hidden></div>
+
+    <dialog class="dialog" id="login-dialog">
+      <form class="dialog-card" id="login-form">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Close">×</button>
+        <div class="dialog-mark"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span></div>
+        <div class="section-kicker">GOOD TO SEE YOU</div>
+        <h2>Welcome back.</h2>
+        <p class="dialog-description">Sign in to add and manage your bookmarks.</p>
+        <label class="field-label" for="username">Username</label>
+        <input class="text-input" id="username" name="username" autocomplete="username" required>
+        <label class="field-label" for="password">Password</label>
+        <input class="text-input" id="password" name="password" type="password" autocomplete="current-password" required>
+        <p class="form-error" id="login-error" role="alert" hidden></p>
+        <button class="primary-button submit-button" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="bookmark-dialog">
+      <form class="dialog-card bookmark-form" id="bookmark-form">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Close">×</button>
+        <div class="section-kicker">A GOOD FIND</div>
+        <h2 id="bookmark-dialog-title">Add an app.</h2>
+        <p class="dialog-description">Add a shortcut. Its icon and preview are fetched automatically.</p>
+        <label class="field-label" for="bookmark-title">Name</label>
+        <input class="text-input" id="bookmark-title" name="title" maxlength="80" placeholder="e.g. A Small World" required>
+        <label class="field-label" for="bookmark-url">Link</label>
+        <input class="text-input" id="bookmark-url" name="url" type="url" placeholder="https://..." required>
+        <label class="field-label" for="bookmark-description">Description</label>
+        <input class="text-input" id="bookmark-description" name="description" maxlength="180" placeholder="A short note about this place" required>
+        <label class="field-label" for="bookmark-category">Category</label>
+        <input class="text-input" id="bookmark-category" name="category" maxlength="32" placeholder="e.g. Inspiration" required>
+        <p class="form-error" id="bookmark-error" role="alert" hidden></p>
+        <button class="primary-button submit-button" type="submit">Save bookmark <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
